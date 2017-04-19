@@ -5,6 +5,11 @@ public class bankaccounts{
     
     int cheque[] = new int [1];
     int savings[] = new int [1];
-
+    
+    // intitialisation
+    cheque[0] = 100;
+    savings[0] = 1000;
+    
+    		
   }
 }
