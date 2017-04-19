@@ -1,12 +1,5 @@
-import java.util.Scanner;
-
 public class bankaccounts{
-  public static void main(String args[]){
-	  System.out.println("Please select an account:");
-	  Scanner sc = new Scanner(System.in);
-	  
-	  System.out.println("CHEQUE or SAVINGS: ");
-	  
+  public static void main(String args[] ){
     //This is just a starting point to store the values of each bank account
     // Declaration & instantiation
     
@@ -17,6 +10,6 @@ public class bankaccounts{
     cheque[0] = 100;
     savings[0] = 1000;
     
-    
+    		
   }
 }
