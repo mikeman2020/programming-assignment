@@ -73,8 +73,9 @@ public class Login {
       } else {
         System.out.print("Access Denied!\n");
       }
-      scan.close();
+      
     }
+    scan.close();
   }
 
   
