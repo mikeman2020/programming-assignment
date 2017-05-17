@@ -2,6 +2,8 @@
 
 import java.util.Scanner;
 import java.io.*;
+import java.util.StringTokenizer;
+
 
 public class Login {
   
@@ -32,7 +34,7 @@ public class Login {
         out.print(username+" ");  
         out.println(password);
         out.close();
-   
+        
         
       } catch (FileNotFoundException e) {
         System.out.println("Error: Cannot open file for writing");
@@ -47,8 +49,8 @@ public class Login {
     else if(input == 2){
       loggingin(username,password);
     }
-  scan.close();
-  scan2.close();
+    scan.close();
+    scan2.close();
   }
   
   public static void loggingin(String user,String pass){
@@ -57,34 +59,63 @@ public class Login {
     //While loop allows the user to re-enter info if access is denied
     boolean index = true;
     while(index){  
+      // gets input from user
       System.out.print("Username: ");
       String inpUser = scan.nextLine();
       System.out.print("Password: ");
-      // gets input from user
       String inpPass = scan.nextLine();
       
       
-      if (inpUser.equals(user) && inpPass.equals(pass)) {
-        System.out.print("Access Granted!");
-        index = false;
-        bankaccounts bank = new bankaccounts();
-        bank.bankmenu();
+      
+      try {
+        BufferedReader reader = new BufferedReader(new FileReader("accounts.txt"));
+        String strLine;
         
-      } else {
-        System.out.print("Access Denied!\n");
+//Read File Line By Line
+        while ((strLine = reader.readLine()) != null)   {
+          // Split line into username & password
+          StringTokenizer userpass = new StringTokenizer(strLine," ");
+          while(userpass.hasMoreTokens()) { 
+            String testuser = userpass.nextToken(); 
+            String testpass = userpass.nextToken(); 
+            reader.close();
+            
+            
+            
+            if (inpUser.equals(testuser) && inpPass.equals(testpass)) {
+              System.out.print("Access Granted!");
+              index = false;
+              bankaccounts bank = new bankaccounts();
+              bank.bankmenu();
+              
+            }
+            else {
+              System.out.print("Access Denied!\n");
+              loggingin(inpUser,inpPass);
+            }
+            
+          }
+        }
+      }
+      catch (FileNotFoundException e) {
+        System.out.println("Error: Cannot open file for writing");
+      }
+      catch (IOException e) {
+        System.out.println("Error: Cannot write to file");
+        
       }
       
     }
     scan.close();
   }
-
+  
   
   
   
   public static void main(String[] args){
     Login login = new Login();
     login.logging();
-
+    
   }
 }
 
