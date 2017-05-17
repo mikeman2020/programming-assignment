@@ -31,8 +31,8 @@ public class Login {
       password = pass;
       try {
         PrintWriter out = new PrintWriter(new FileWriter("accounts.txt"));
-        out.print(username+" ");  
-        out.println(password);
+        out.append(username+" ");  
+        out.append(password);
         out.close();
         
         
@@ -118,6 +118,3 @@ public class Login {
     
   }
 }
-
-
-
