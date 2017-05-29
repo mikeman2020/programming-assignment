@@ -1,17 +1,15 @@
-//Logging in
-
 import java.util.Scanner;
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 public class Login {
-  
+
   //Method for creating a user & passw.
   public void logging(){
     String username = "";
     String password = "";
-    
+  
     Scanner scan = new Scanner (System.in);
     Scanner scan2 = new Scanner (System.in);
     Scanner inp = new Scanner (System.in);
@@ -21,22 +19,44 @@ public class Login {
     
     if(input == 1){
       
-      
-      
       System.out.print("Create a Username: ");
       String user = scan.nextLine();
       System.out.print("Create a Password: ");
       String pass = scan2.nextLine();
       username = user;
       password = pass;
+      
+      
+      
+      
       try {
-        PrintWriter out = new PrintWriter(new FileWriter("accounts.txt"));
-        out.append(username+" ");  
-        out.append(password);
-        out.close();
+        FileWriter usernames1 = new FileWriter("usernames.txt" , true);
+        BufferedWriter bw = new BufferedWriter(usernames1);
+        PrintWriter pw = new PrintWriter(bw);
         
+        pw.print(username+";");  
+        pw.close();
         
-      } catch (FileNotFoundException e) {
+      }
+      
+      catch (FileNotFoundException e) {
+        System.out.println("Error: Cannot open file for writing");
+      }
+      catch (IOException e) {
+        System.out.println("Error: Cannot write to file");
+        
+      }
+      try {
+        FileWriter passwords1 = new FileWriter("passwords.txt" , true);
+        BufferedWriter wb = new BufferedWriter(passwords1);
+        PrintWriter wp = new PrintWriter(wb);
+        
+        wp.print(password+";");  
+        wp.close();
+        
+      }
+      
+      catch (FileNotFoundException e) {
         System.out.println("Error: Cannot open file for writing");
       }
       catch (IOException e) {
@@ -64,57 +84,81 @@ public class Login {
       String inpUser = scan.nextLine();
       System.out.print("Password: ");
       String inpPass = scan.nextLine();
-      
-      
-      
-      try {
-        BufferedReader reader = new BufferedReader(new FileReader("accounts.txt"));
-        String strLine;
-        
-//Read File Line By Line
-        while ((strLine = reader.readLine()) != null)   {
-          // Split line into username & password
-          StringTokenizer userpass = new StringTokenizer(strLine," ");
-          while(userpass.hasMoreTokens()) { 
-            String testuser = userpass.nextToken(); 
-            String testpass = userpass.nextToken(); 
-            reader.close();
-            
-            
-            
-            if (inpUser.equals(testuser) && inpPass.equals(testpass)) {
-              System.out.print("Access Granted!");
-              index = false;
-              bankaccounts bank = new bankaccounts();
-              bank.bankmenu();
-              
-            }
-            else {
-              System.out.print("Access Denied!\n");
-              loggingin(inpUser,inpPass);
-            }
+          ArrayList <String> usernames = new ArrayList<String>();
+
+      try
+      {
+        BufferedReader ureader = new BufferedReader(new FileReader("usernames.txt"));
+        String uline;
+        while ((uline = ureader.readLine()) != null)
+        {
+          StringTokenizer tok = new StringTokenizer(uline, ";");
+          while(tok.hasMoreTokens()) {
+            usernames.add(tok.nextToken());
             
           }
         }
+        ureader.close();
       }
-      catch (FileNotFoundException e) {
-        System.out.println("Error: Cannot open file for writing");
-      }
-      catch (IOException e) {
-        System.out.println("Error: Cannot write to file");
+      catch (Exception e)
+      {
+        System.err.format("Exception occurred trying to read '%s'.", "usernames.txt");
+        e.printStackTrace();
         
       }
+          ArrayList <String> passwords = new ArrayList<String>();
+      try
+      {
+        BufferedReader preader = new BufferedReader(new FileReader("passwords.txt"));
+        String pline;
+        while ((pline = preader.readLine()) != null)
+        {
+          StringTokenizer tok2 = new StringTokenizer(pline, ";");
+          while(tok2.hasMoreTokens()) {
+            passwords.add(tok2.nextToken());
+          }
+        }
+        preader.close();
+      }
+      
+      catch (Exception e)
+      {
+        System.err.format("Exception occurred trying to read '%s'.", "passwords.txt");
+        e.printStackTrace();
+        
+      }
+
+      
+      
+      
+      if((usernames.contains(inpUser)) && (passwords.contains(inpPass))) {
+        int ulocation = usernames.indexOf(inpUser);
+        int plocation = passwords.indexOf(inpPass);
+        
+        if (ulocation == plocation){
+          bankaccounts bank = new bankaccounts();
+          bank.bankmenu(); 
+        }
+        
+      }
+      else {
+        System.out.print("Username or password is Incorrect!\n");
+        loggingin(inpUser,inpPass);
+        
+      }
+      scan.close();
+      
+        
+      
       
     }
-    scan.close();
   }
+
+
+
+public static void main(String[] args){
+  Login login = new Login();
+  login.logging();
   
-  
-  
-  
-  public static void main(String[] args){
-    Login login = new Login();
-    login.logging();
-    
-  }
+}
 }
