@@ -32,7 +32,7 @@ public class bankaccounts {
   
   // MENU: Select account to deposit
   // Allows user to select which account to deposit money into
-  public void addfunds(){
+  public void addfunds(int index1, int index2){
     
     System.out.println("Which account would you like to add funds to ?; \nCheque: 1\nSavings: 2");
     int acc = sc.nextInt();
@@ -41,7 +41,7 @@ public class bankaccounts {
     
     if(acc == 1){
       setcheque(dep);
-      cheqlist.add(cheque);
+      cheqlist.add(index1,cheque);
       
         
             try {
@@ -70,7 +70,7 @@ public class bankaccounts {
     }
     else if(acc == 2){
       setsavings(dep);
-      savlist.add(savings);
+      savlist.add(index1,savings);
       try {
         FileWriter save = new FileWriter("savings.txt", true);
         BufferedWriter wb = new BufferedWriter(save);
@@ -164,7 +164,8 @@ public class bankaccounts {
     System.out.println("Would you like to go back to the main menu ? y/n ");
     String yesno = sc.next();
     if(yesno.equals("y")){
-      bankmenu();
+           Login login = new Login();
+      login.logging();
     }
     else if(yesno.equals("n")){
       System.out.println("Logging out ... ");
@@ -180,7 +181,7 @@ public class bankaccounts {
     System.out.println("Would you like to go back to Select an account to add funds ? y/n ");
     String yesno = sc.next();
     if(yesno.equals("y")){
-      addfunds();
+      back2accounts();
     }
     else if(yesno.equals("n")){
       System.out.println("Goodbye!");
@@ -241,17 +242,19 @@ public class bankaccounts {
   }
   //MENU: after logging in success
   //Menu for selecting options after logging in
-  public void bankmenu(){
+  public void bankmenu(int indexuser, int indexpass){
+    int indexu = indexuser;
+    int indexp = indexpass;
     System.out.println("\n\nPlease enter a number to select an Option:\n View account balances: 1 \n Add funds: 2\n Withdraw Funds: 3\n Transfer funds: 4");
     int input = sc.nextInt();
     if(input == 1){
       System.out.println("==== ACCOUNTS ====");
-      System.out.println("Cheque: $"+cheque+"\nSavings: $"+savings);
+      System.out.println("Cheque: $"+cheqlist(indexuser)+"\nSavings: $"+savlist(indexuser));
       back2menu();
       
     }
     else if(input == 2){
-      addfunds();
+      addfunds(indexu,indexp);
     }
     else if(input == 3){
       withdraw();
